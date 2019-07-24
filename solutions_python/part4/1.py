@@ -10,7 +10,7 @@ for i in range(n):
     l_tmp = (int(lineIn[0]))
     r_tmp = (int(lineIn[1]))
     r_l.append([r_tmp, l_tmp])
-    
+
 r_l.sort()
 
 m_coord = []
@@ -22,11 +22,5 @@ for i in range(n):
         m = m + 1
         m_coord.append(r_l[i][0])
 
-
-#sys.stdout.write(str([m, m_coord]))
-        
 print(len(m_coord))
 print(' '.join(map(str, m_coord)))
-#sys.stdout.write(str(len(points)) + '\n')
-#for i in range(len(points)):
-#    sys.stdout.write(str(points[i]) + ' ')
