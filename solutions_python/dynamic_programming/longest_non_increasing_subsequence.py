@@ -1,43 +1,39 @@
-def longest_non_increasing_subsequence(a):
-    d = []
-    p = []
-    for i in a:
-        d.append(0)
-        p.append(0)
+"""
 
-    for i in range(len(a)):
-        d[i] = 1
-        p[i] = -1
+ Задача на программирование повышенной сложности: наибольшая невозрастающая подпоследовательность
 
-        for j in range(0, i):
-            if a[j] >= a[i]:
-                if d[j] + 1 > d[i]:
-                    d[i] = 1 + d[j]
-                    p[i] = j
 
-    ans = d[0]
-    pos = 0
-    for i, elem in enumerate(d):
-        if d[i] > ans:
-            ans = d[i]
-            pos = i
+ Дано целое число 1≤n≤10^5 и массив A[1…n], содержащий неотрицательные целые числа, не превосходящие 10^9.
+ Найдите наибольшую невозрастающую подпоследовательность в A.
+ В первой строке выведите её длину k, во второй — её индексы 1≤i[1]<i[2]<…<i[k]≤n
+ (таким образом, A[ i[1] ]≥A[ i[2] ]≥…≥A[ i[n] ]).
 
-    seq = []
+ Sample Input:
+ 5
+ 5 3 4 4 2
 
-    while pos != -1:
-        seq.append(pos + 1)
-        pos = p[pos]
+ Sample Output:
+ 4
+ 1 3 4 5
 
-    return ans, reversed(seq)
-
+"""
+from bisect import bisect_right
 
 if __name__ == '__main__':
-    # n = int(input())
-    # a = list(map(int, input().split()))
-    a = [5, 3, 4, 4, 2]
-    ans, seq = longest_non_increasing_subsequence(a)
-    print(ans)
-    print(*seq)
 
-    # TODO: use upper bound
-    # TODO: http://e-maxx.ru/algo/longest_increasing_subseq_log
+    _, a, d, prev = input(), list(map(int, input().split())), [], []
+    for i, x in enumerate(a):
+        j = bisect_right(d, [-x, i])
+        if j == len(d):
+            d.append([-x, i])
+        else:
+            if -d[j][0] < x:
+                d[j] = [-x, i]
+
+        prev.append(d[j - 1][1] if j else None)
+
+    out = [d[-1][1]]
+    while prev[out[-1]] is not None:
+        out.append(prev[out[-1]])
+
+    print(len(out), ' '.join(str(x + 1) for x in reversed(out)), sep='\n')
