@@ -27,7 +27,6 @@ def check_brackets(brackets):
                 return idx + 1
             else:
                 top = stack.pop()
-                last_index = indexes.pop()
 
             if mapping[top] != b:
                 return idx + 1
