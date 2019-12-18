@@ -1,42 +1,43 @@
-import sys
+"""
+Формат входа. Первая строка содержит натуральное число n. Вторая строка содержит n целых чисел
+parent0, . . . , parent_n−1. Для каждого 0 ≤ i ≤ n−1, parent_i — родитель вершины i; если parent_i = −1,
+то i является корнем. Гарантируется, что корень ровно один. Гарантируется, что данная последовательность задаёт дерево.
+Формат выхода.
+Высота дерева.
+Ограничения. 1 ≤ n ≤ 10^5
+"""
 
-sys.setrecursionlimit(20000)
 
+def find_from_list(child, memory, nodes):
+    parent = nodes[child]
+    parent_original = parent
 
-def find(child, tree, memory):
-    height = 1
-    if child not in memory:
-        memory[child] = height
-        return height
-    elif memory[child] != -1:
-        return memory[child]
-    else:
-        # TODO: optimize this loop
-        for c, p in enumerate(tree):
-            if tree[c] == child:
-                if c in memory and memory[c] != -1:
-                    compare_height = memory[c] + 1
-                else:
-                    compare_height = find(c, tree, memory) + 1
-                height = max(height, compare_height)
-        memory[child] = height
-        return height
+    if parent in memory:
+        return memory[parent]
+    height = 0
+    while parent != -1:
+        child = parent
+        parent = nodes[child]
+        height += 1
+    memory[parent_original] = height
+    return height + 1
 
 
 if __name__ == '__main__':
-    n = input()
     nodes = []
+    not_leafs = set([])
     memory = {}
-    root = None
+    n = input()
 
-    for idx, node in enumerate(map(int, input().split())):
+    for idx, node in enumerate(input().split()):
+        node = int(node)
         nodes.append(node)
-        memory[node] = -1
+        not_leafs.add(node)
 
-        if node == -1:
-            root = idx
+    max_height = -1
+    for i in range(len(nodes)):
+        if i not in not_leafs:
+            child = i
+            max_height = max(max_height, find_from_list(child, memory, nodes))
 
-    for c, p in enumerate(nodes):
-        height = find(c, nodes, memory)
-
-    print(memory[root])
+    print(max_height)
